@@ -1,0 +1,27 @@
+---
+title: "Quarto-header-icon Example"
+filters:
+  - quarto-header-icon
+
+header_icon:
+  custom_icons:
+    - "my.json"
+---
+
+## Heading {ico="jam:header-2"}
+
+This filter adds the associated Iconify icon preceding the heading text.
+
+```default
+## Heading {ico="jam:header-2"}
+```
+
+## Custom icons {ico="my:docstring"}
+
+This should be a custom icon from the `my.json` icon set in this directory. Probably too fragile for general use; more testing required.
+
+## Todos {ico="lucide:list-todo"}
+
+[ ] Investigate using [the Iconify extension](https://github.com/mcanouil/quarto-iconify) as a dependency instead of copying the minified .js in this extension too
+
+[x] Allow use of custom, local Iconify icon sets. Can be hacked into minified Iconify .js file, but not ideal.
