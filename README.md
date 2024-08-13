@@ -20,4 +20,4 @@ Adding the attribute `ico="set:icon"` to a header or span will insert that icon 
 
 Here is the source code for a minimal example: [example.qmd](example.qmd).
 
-See the resulting html [here](https://cbcgirard.github.io/quarto-header-icon/example.html)
+See the resulting html [here](https://cbcgirard.github.io/quarto-header-icon/index.html)

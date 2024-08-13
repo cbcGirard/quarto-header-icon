@@ -4,7 +4,8 @@ filters:
   - quarto-header-icon
 
 format: 
-  html: default
+  html: 
+    output-file: "index.html"
   revealjs: 
     output-file: "reveal.html"
     header_icon:
