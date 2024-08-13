@@ -3,6 +3,13 @@ title: "Quarto-header-icon Example"
 filters:
   - quarto-header-icon
 
+format: 
+  html: default
+  revealjs: 
+    output-file: "reveal.html"
+    header_icon:
+      make_watermark: true
+
 header_icon:
   custom_icons:
     - "my.json"
@@ -10,18 +17,61 @@ header_icon:
 
 ## Heading {ico="jam:header-2"}
 
-This filter adds the associated Iconify icon preceding the heading text.
+This filter adds the associated Iconify icon preceding the heading text:
 
-```default
+```markdown
 ## Heading {ico="jam:header-2"}
 ```
 
-## Custom icons {ico="my:docstring"}
+Unlike the [normal Iconify extension](https://github.com/mcanouil/quarto-iconify), this filter uses Iconify's `set:icon` syntax to designate the icon; this is the default naming convention that will be copied from [browsing the Iconify website](https://icon-sets.iconify.design/).
 
-This should be a custom icon from the `my.json` icon set in this directory. Probably too fragile for general use; more testing required.
+## Span notation {ico="mdi:code-brackets"}
+
+Span notation can be used to add an icon []{ico='bi:lightbulb'} to inline text:
+
+```default
+... an icon []{ico='bi:lightbulb'} to inline text:
+```
+
+
+## Pseudolists {ico="lucide:list-todo"}
+
+- [Using this span notation for a list item will replace the bullet with the specified icon]{ico="mdi:code-brackets"}
+- [Main level]{ico="bi:unindent"}
+  - [This is indented one level]{ico="bi:indent"}
+
+- [This required some Javascript hackery to get working, so it obviously only works with HTML-based formats]{ico="carbon:js-error"}
+
+```markdown
+- [Using this span notation for a list item will replace the bullet with the specified icon]{ico="mdi:code-brackets"}
+- [Main level]{ico="bi:unindent"}
+  - [This is indented one level]{ico="bi:indent"}
+
+- [This required some Javascript hackery to get working, so it obviously only works with HTML-based formats]{ico="carbon:js-error"}
+```
+
+## Custom icons {ico="my:docstring"}
+Additional icon sets (as [properly formatted .json files](https://iconify.design/docs/types/iconify-json.html)) can be added to the `custom_icons` list in the YAML frontmatter:
+
+```yaml
+header_icon:
+  custom_icons:
+    - "my.json"
+```
+
+This will include `my.json` from the document directory. Needs further testing for robustness.
+
+## Reveal.js {ico="mdi:presentation"}
+
+Including 
+
+```yaml
+header_icon:
+  make_watermark: true
+```
+
+will also add the icon as a watermark in the reveal.js slide.
 
 ## Todos {ico="lucide:list-todo"}
 
-[ ] Investigate using [the Iconify extension](https://github.com/mcanouil/quarto-iconify) as a dependency instead of copying the minified .js in this extension too
-
-[x] Allow use of custom, local Iconify icon sets. Can be hacked into minified Iconify .js file, but not ideal.
+[ ] Investigate using [the Iconify extension](https://github.com/mcanouil/quarto-iconify) as a dependency instead of supplying the same minified .js in this extension too

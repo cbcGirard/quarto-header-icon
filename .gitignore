@@ -3,5 +3,4 @@
 *_files/
 /.luarc.json
 
-*.json
 custom_icons.js

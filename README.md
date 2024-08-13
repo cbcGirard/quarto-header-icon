@@ -1,10 +1,8 @@
 # Quarto-header-icon Extension For Quarto
 
-_TODO_: Add a short description of your extension.
+Easily spruce up headers, lists, and the like with Iconify icons
 
 ## Installing
-
-_TODO_: Replace the `<github-organization>` with your GitHub organization.
 
 ```bash
 quarto add cbcGirard/quarto-header-icon
@@ -15,8 +13,7 @@ If you're using version control, you will want to check in this directory.
 
 ## Using
 
-_TODO_: Describe how to use your extension.
-
+Adding the attribute `ico="set:icon"` to a header or span will insert that icon before the 
 ## Example
 
 Here is the source code for a minimal example: [example.qmd](example.qmd).
