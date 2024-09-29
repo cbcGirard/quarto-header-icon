@@ -35,11 +35,11 @@ local function ensure_html_deps()
     name = 'iconify',
     version = '2.1.0',
     scripts = { "iconify-icon.min.js",
-                "iconify-pseudolist.js"
-  },
-  stylesheets = {
-          "watermark.css"
-  }
+      "iconify-pseudolist.js"
+    },
+    stylesheets = {
+      "watermark.css"
+    }
   })
 end
 
@@ -71,45 +71,10 @@ local function getIco(el)
     ico_code = el.attributes.ico
     ico_string = "<iconify-icon inline icon=\"" .. ico_code .. "\"></iconify-icon>"
     ico = pandoc.RawInline("html", ico_string)
-
   end
   return ico
 end
 
-local function recursiveGetIco(el)
-  if (el.attributes and el.attributes.ico) then
-    -- quarto.log.warning('boo')
-    ico = el.attributes.ico
-
-    -- remove from inner
-    -- el.attributes.ico = nil
-    return ico
-  else
-    if el.content then
-      -- quarto.log.warning(el.content)
-      for index, value in ipairs(el.content) do
-        -- quarto.log.warning(index)
-        tst_ico = recursiveGetIco(value)
-        -- quarto.log.warning(tst_ico)
-        if tst_ico ~= nil then
-          -- quarto.log.warning(tst_ico)
-          return tst_ico
-        end
-      end
-    else
-      for index, value in ipairs(el) do
-        tst_ico = recursiveGetIco(value)
-        -- quarto.log.warning(tst_ico)
-        if tst_ico ~= nil then
-          -- quarto.log.warning(tst_ico)
-          return tst_ico
-        end
-      end
-      -- quarto.log.warning(el)
-    end
-  end
-  return nil
-end
 
 function Header(el)
   if (el.attributes and el.attributes.ico) then
@@ -127,34 +92,6 @@ function Span(el)
   return el
 end
 
-function BulletList(el)
-  tst_ico = recursiveGetIco(el)
-  quarto.log.warning(el)
-
-  if tst_ico ~= nil then
-
-    ico = tst_ico:gsub(":", "/")
-    url = 'https://api.iconify.design/' .. ico .. '.svg'
-
-    -- if el.attr then
-    --   el.attributes:insert { style = 'list-style-image:url(' .. url .. ');' }
-    -- else
-    --   el.attr= { style = 'list-style-image:url(' .. url .. ');' }
-    -- end
-    attr=pandoc.Attr{"", {}, style = 'list-style-image:url(' .. url .. ');' }
-
-    for index, value in ipairs(el.content) do
-      if value.attr then
-        value.attr=attr
-      end
-    end
-
-    -- quarto.log.warning(el)
-  end
-
-  return el
-end
-
 ---Add icon as background watermark to RevealJS slide
 ---@param doc pandoc.Doc
 ---@return pandoc.Doc
@@ -168,28 +105,42 @@ function Pandoc(doc)
   end
 
   for index, block in ipairs(doc.blocks) do
+    do_add_watermark = true
+    -- if block.attributes then
+    --   if block.attributes.nowater then
+    --     do_add_watermark = false
+    --   end
+    -- end
+    if block.level then
+      if block.level == 1 then
+        do_add_watermark = false
+      end
+    end
+    if block.classes then
+      -- quarto.log.warning(block.classes)
+      if block.classes:includes("nowater") then
+        -- quarto.log.warning(do_add_watermark)
+        do_add_watermark = false
+      end
+    end
     if block.attributes then
       if block.attributes.ico then
-        if block.level then
-          if (block.level ~= 1) then
-            ico_code = block.attributes.ico
-            ico_string = "<iconify-icon icon=\"" .. ico_code .. "\" height=\"80vh\"></iconify-icon>"
-            if block.attributes.nowater == nil then
-              ico = pandoc.RawInline("html", ico_string)
+        ico_code = block.attributes.ico
+        ico_string = "<iconify-icon icon=\"" .. ico_code .. "\" height=\"80vh\"></iconify-icon>"
+        if do_add_watermark then
+          ico = pandoc.RawInline("html", ico_string)
 
-              -- d = pandoc.Div(ico)
-              d = pandoc.Span(ico)
+          -- d = pandoc.Div(ico)
+          d = pandoc.Span(ico)
 
-              d.classes:insert("watermark")
-              d.classes:insert("hcenter")
-              d.classes:insert("vcenter")
+          d.classes:insert("watermark")
+          d.classes:insert("hcenter")
+          d.classes:insert("vcenter")
 
-              divs:insert(d)
+          divs:insert(d)
 
-              indices:insert(index + offset)
-              offset = offset + 1
-            end
-          end
+          indices:insert(index + offset)
+          offset = offset + 1
         end
       end
     end
@@ -208,8 +159,6 @@ end
 return {
   { Meta = Meta },
   { ensure_html_deps() },
-  -- {    BulletList = BulletList,
--- },
   {
     Header = Header,
     Span = Span,
